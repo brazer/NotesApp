@@ -16,8 +16,8 @@ public class AddNotePresenter implements AddNoteContract.UserActionsListener {
     @NonNull
     private final AddNoteContract.View mAddNoteView;
 
-    AddNotePresenter(@NonNull NotesRepository notesRepository,
-                     @NonNull AddNoteContract.View addNoteView) {
+    public AddNotePresenter(@NonNull NotesRepository notesRepository,
+                            @NonNull AddNoteContract.View addNoteView) {
         mNotesRepository = checkNotNull(notesRepository);
         mAddNoteView = checkNotNull(addNoteView);
     }
@@ -28,12 +28,12 @@ public class AddNotePresenter implements AddNoteContract.UserActionsListener {
         mNotesRepository.addNote(note, new NotesRepository.ActionNotesCallback() {
             @Override
             public void onSuccess() {
-                mAddNoteView.showNotesList();
+                mAddNoteView.showNotes();
             }
 
             @Override
             public void onFailed(String message) {
-                mAddNoteView.showEmptyNoteError(message);
+                mAddNoteView.onFailed(message);
             }
         });
     }

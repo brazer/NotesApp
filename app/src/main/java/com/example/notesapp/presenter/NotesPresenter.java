@@ -10,10 +10,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Created by Admin on 25.10.2016.
- */
-
 public class NotesPresenter implements NotesContract.UserActionsListener {
 
     private final NotesContract.View mNotesView;
@@ -50,6 +46,11 @@ public class NotesPresenter implements NotesContract.UserActionsListener {
     @Override
     public void openNoteDetails(int position) {
         mNotesView.showNoteDetailUi(position);
+    }
+
+    @Override
+    public boolean isLimitOfNotesReached() {
+        return mNotesRepository.isLimitOfNotesReached();
     }
 
 }

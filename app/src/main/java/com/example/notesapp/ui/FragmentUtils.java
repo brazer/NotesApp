@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 
 /**
  * Author: Anatol Salanevich
- * Date: 23.12.2015
  */
 public class FragmentUtils {
 

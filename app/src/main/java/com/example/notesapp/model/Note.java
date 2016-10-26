@@ -1,8 +1,18 @@
 package com.example.notesapp.model;
 
-public final class Note {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
+public final class Note implements Serializable {
+
+    @Expose
+    @SerializedName("title")
     private String title;
+
+    @Expose
+    @SerializedName("description")
     private String description;
 
     public Note(String title, String description) {

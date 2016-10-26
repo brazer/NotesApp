@@ -22,5 +22,6 @@ public interface NotesRepository {
     void saveNote(int position, @NonNull Note note, @NonNull ActionNotesCallback callback);
     void addNote(@NonNull Note note, @NonNull ActionNotesCallback callback);
     void deleteNote(int position, @NonNull ActionNotesCallback callback);
+    boolean isLimitOfNotesReached();
 
 }

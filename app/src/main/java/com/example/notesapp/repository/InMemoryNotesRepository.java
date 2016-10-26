@@ -17,6 +17,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class InMemoryNotesRepository implements NotesRepository {
 
+    private final int LIST_SIZE_LIMIT = 10;
+
     List<Note> mCachedNotes;
 
     public InMemoryNotesRepository() { }
@@ -44,9 +46,13 @@ public class InMemoryNotesRepository implements NotesRepository {
     public void addNote(@NonNull Note note, @NonNull ActionNotesCallback callback) {
         checkNotNull(note);
         checkNotNull(callback);
-        ArrayList<Note> notes = new ArrayList<>(mCachedNotes);
-        notes.add(note);
-        API.getInstance().getService().saveNotes(notes, new ActionResponse(callback, note));
+        if (mCachedNotes.size() == LIST_SIZE_LIMIT) {
+            callback.onFailed("Too many notes!");
+        } else {
+            ArrayList<Note> notes = new ArrayList<>(mCachedNotes);
+            notes.add(note);
+            API.getInstance().getService().saveNotes(notes, new ActionResponse(callback, note));
+        }
     }
 
     @Override
@@ -55,6 +61,11 @@ public class InMemoryNotesRepository implements NotesRepository {
         ArrayList<Note> notes = new ArrayList<>(mCachedNotes);
         notes.remove(position);
         API.getInstance().getService().saveNotes(notes, new ActionResponse(callback, position));
+    }
+
+    @Override
+    public boolean isLimitOfNotesReached() {
+        return mCachedNotes != null && mCachedNotes.size() == LIST_SIZE_LIMIT;
     }
 
     private class NotesResponse implements Callback<ArrayList<Note>> {
@@ -67,7 +78,7 @@ public class InMemoryNotesRepository implements NotesRepository {
 
         @Override
         public void success(ArrayList<Note> notes, Response response) {
-            mCachedNotes = ImmutableList.copyOf(notes);
+            mCachedNotes = notes;
             callback.onNotesLoaded(mCachedNotes);
         }
 

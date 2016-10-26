@@ -36,8 +36,6 @@ public class MainFragment extends Fragment implements NotesContract.View {
 
     public final static String TAG = MainFragment.class.getSimpleName();
 
-    private static final int REQUEST_ADD_NOTE = 1;
-
     private NotesContract.UserActionsListener mActionsListener;
 
     private NotesAdapter mListAdapter;
@@ -71,12 +69,9 @@ public class MainFragment extends Fragment implements NotesContract.View {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // If a note was successfully added, show snackbar
-        if (REQUEST_ADD_NOTE == requestCode && Activity.RESULT_OK == resultCode) {
-            Snackbar.make(getView(), "Note was saved",
-                    Snackbar.LENGTH_SHORT).show();
-        }
+    public void onStart() {
+        super.onStart();
+        mActionsListener.loadNotes();
     }
 
     @Override
@@ -139,18 +134,25 @@ public class MainFragment extends Fragment implements NotesContract.View {
     @Override
     public void showNotes(List<Note> notes) {
         mListAdapter.replaceData(notes);
+        if (notes.size() == 0)
+            Snackbar.make(getView(), "Add a note", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showAddNote() {
-        Intent intent = new Intent(getContext(), AddNoteActivity.class);
-        startActivityForResult(intent, REQUEST_ADD_NOTE);
+        if (mActionsListener.isLimitOfNotesReached())
+            Snackbar.make(getView(), "Limit of amount of notes is reached.", Snackbar.LENGTH_LONG).show();
+        else {
+            Intent intent = new Intent(getContext(), AddNoteActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
     public void showNoteDetailUi(int noteId) {
         Intent intent = new Intent(getContext(), NoteDetailActivity.class);
         intent.putExtra(NoteDetailActivity.EXTRA_NOTE_ID, noteId);
+        intent.putExtra(NoteDetailActivity.EXTRA_NOTE, mListAdapter.getItem(noteId));
         startActivity(intent);
     }
 

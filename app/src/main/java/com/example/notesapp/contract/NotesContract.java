@@ -20,6 +20,7 @@ public interface NotesContract {
         void loadNotes();
         void addNewNote();
         void openNoteDetails(int position);
+        boolean isLimitOfNotesReached();
     }
 
 }

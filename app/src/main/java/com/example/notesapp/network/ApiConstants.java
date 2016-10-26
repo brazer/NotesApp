@@ -6,6 +6,6 @@ package com.example.notesapp.network;
 
 public final class ApiConstants {
 
-    public final static String BASE_URL = "http://profigroup.by/applicants-tests/mobile/v2/8KmdeNB";
+    public final static String BASE_URL = "https://profigroup.by/applicants-tests/mobile/v2/8KmdeNB";
 
 }
